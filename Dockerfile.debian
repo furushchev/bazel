@@ -1,0 +1,38 @@
+ARG BASE_VERSION=12
+
+FROM debian:${BASE_VERSION} AS builder
+
+ARG BAZELISK_VERSION=1.28.1
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -qq update \
+    && apt-get -qq -y --no-install-recommends install ca-certificates openssl wget
+RUN wget -qO bazelisk "https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-$(dpkg --print-architecture)"
+
+FROM debian:${BASE_VERSION}
+
+ARG BAZELISK_VERSION=1.28.1
+ARG BASE_VERSION=12
+
+# OCI Image metadata
+LABEL org.opencontainers.image.title="Bazel Docker Image" \
+      org.opencontainers.image.description="Bazelisk/Bazel build environment on Debian stable" \
+      org.opencontainers.image.version="${BAZELISK_VERSION}" \
+      org.opencontainers.image.authors="Yuki Furuta" \
+      org.opencontainers.image.vendor="furushchev" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.url="https://github.com/furushchev/bazel" \
+      org.opencontainers.image.source="https://github.com/furushchev/bazel" \
+      org.opencontainers.image.documentation="https://github.com/furushchev/bazel/blob/main/README.md" \
+      org.opencontainers.image.base.name="docker.io/library/debian:${BASE_VERSION}"
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -qq update \
+    && apt-get -qq --no-install-recommends install ca-certificates git \
+    && rm -rf /var/lib/apt/lists/*
+COPY --from=builder --chmod=755 bazelisk /usr/bin/bazelisk
+RUN ln -sf /usr/bin/bazelisk /usr/bin/bazel
+
+ENTRYPOINT ["/usr/bin/bazel"]
