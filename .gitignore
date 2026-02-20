@@ -1,0 +1,28 @@
+# Docker artifacts
+*.tar
+*.tar.gz
+*.log
+
+# Build outputs
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+.Trash-*
+
+# Test outputs
+test-results/
+coverage/
+
+# Temporary
+tmp/
+*.tmp

@@ -1,0 +1,37 @@
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (not needed in build)
+*.md
+LICENSE
+claudedocs/
+
+# GitHub
+.github/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+*.tar
+*.tar.gz
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+.Trash-*
+
+# Test outputs
+test-results/
+coverage/
+
+# Temporary files
+tmp/
+*.tmp
