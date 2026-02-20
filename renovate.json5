@@ -46,7 +46,7 @@
   customManagers: [
     {
       customType: 'regex',
-      fileMatch: ['^Dockerfile\\.ubuntu$'],
+      fileMatch: ['^Dockerfile\\..*$'],
       matchStrings: [
         // Match: ARG BAZELISK_VERSION=1.28.1
         'ARG BAZELISK_VERSION=(?<currentValue>.*?)\\n',
