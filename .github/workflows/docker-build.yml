@@ -14,13 +14,24 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  validate-renovate:
+    name: Validate Renovate Config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate renovate.json5
+        run: |
+          npx --package renovate -- renovate-config-validator
+
   build:
     strategy:
       fail-fast: false
       matrix:
         include:
           - { distro: 'ubuntu', base_version: '24.04' }
-    name: '${{ matrix.distro }}-${{ matrix.base_version }}'
+    name: 'Build ${{ matrix.distro }}-${{ matrix.base_version }}'
     runs-on: ubuntu-latest
     permissions:
       contents: read

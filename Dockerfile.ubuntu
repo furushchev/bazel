@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -qq update \
     && apt-get -qq -y --no-install-recommends install ca-certificates openssl wget
-RUN wget -O bazelisk "https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-$(dpkg --print-architecture)"
+RUN wget -qO bazelisk "https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-$(dpkg --print-architecture)"
 
 FROM ubuntu:${BASE_VERSION}
 
@@ -32,8 +32,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -qq update \
     && apt-get -qq --no-install-recommends install ca-certificates git \
     && rm -rf /var/lib/apt/lists/*
-COPY --from=builder bazelisk /usr/bin
-RUN chmod +x /usr/bin/bazelisk
+COPY --from=builder --chmod=755 bazelisk /usr/bin/bazelisk
 RUN ln -sf /usr/bin/bazelisk /usr/bin/bazel
 
 ENTRYPOINT ["/usr/bin/bazel"]
