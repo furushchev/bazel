@@ -14,6 +14,17 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  validate-renovate:
+    name: Validate Renovate Config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate renovate.json5
+        run: |
+          npx --yes renovate-config-validator
+
   build:
     strategy:
       fail-fast: false

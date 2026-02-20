@@ -1,0 +1,58 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+
+  // Base configuration presets
+  extends: [
+    'config:base',
+  ],
+
+  // PR settings
+  labels: ['dependencies', 'renovate'],
+  assignees: ['furushchev'],
+  prConcurrentLimit: 5,
+  prHourlyLimit: 2,
+
+  // Timing
+  timezone: 'UTC',
+  schedule: ['before 3am on Monday'],
+
+  // Version handling
+  separateMinorPatch: true,
+
+  // Package-specific rules
+  packageRules: [
+    {
+      // Bazelisk updates
+      matchDatasources: ['github-releases'],
+      matchPackageNames: ['bazelbuild/bazelisk'],
+      groupName: 'Bazelisk',
+      semanticCommitType: 'build',
+      semanticCommitScope: 'bazelisk',
+      commitMessageTopic: 'Bazelisk',
+      automerge: false,
+      major: {
+        enabled: true,
+      },
+      minor: {
+        enabled: true,
+      },
+      patch: {
+        enabled: true,
+      },
+    },
+  ],
+
+  // Custom regex managers for Dockerfile ARG parsing
+  regexManagers: [
+    {
+      fileMatch: ['^Dockerfile\\.ubuntu$'],
+      matchStrings: [
+        // Match: ARG BAZELISK_VERSION=1.28.1
+        'ARG BAZELISK_VERSION=(?<currentValue>.*?)\\n',
+      ],
+      datasourceTemplate: 'github-releases',
+      depNameTemplate: 'bazelbuild/bazelisk',
+      versioningTemplate: 'semver',
+    },
+  ],
+}
