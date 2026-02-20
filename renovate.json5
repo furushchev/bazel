@@ -3,7 +3,7 @@
 
   // Base configuration presets
   extends: [
-    'config:base',
+    'config:recommended',
   ],
 
   // PR settings
@@ -43,8 +43,9 @@
   ],
 
   // Custom regex managers for Dockerfile ARG parsing
-  regexManagers: [
+  customManagers: [
     {
+      customType: 'regex',
       fileMatch: ['^Dockerfile\\.ubuntu$'],
       matchStrings: [
         // Match: ARG BAZELISK_VERSION=1.28.1
